@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Allure Nigeria Events — Weddings · Corporate · Social</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ALLURE NIGERIA EVENTS — LUXURY EVENT PLANNING WEBSITE
+   Token system:
+   Color  — ivory #FBF8F3, white #FFFFFF, ink #241A17,
+            wine #7C1B2E, wine-deep #4A0E1B, gold #B08D57, gold-light #E7D2A8
+   Type   — Display script: Parisienne (the "signature")
+             Headings: Playfair Display
+             Body/UI:  Jost
+   Motif  — hand-drawn rococo flourish line, echoed from the brand mark,
+             redrawn as an SVG that "inks itself" on scroll/load.
+   ============================================================ */
+:root{
+  --ivory:#FBF8F3;
+  --white:#FFFFFF;
+  --ink:#241A17;
+  --ink-soft:#5b4d48;
+  --wine:#7C1B2E;
+  --wine-deep:#4A0E1B;
+  --gold:#B08D57;
+  --gold-light:#E7D2A8;
+  --blush:#F5E9E6;
+  --line:#e7ddd2;
+  --shadow: 0 30px 60px -20px rgba(36,26,23,0.25);
+  --ease: cubic-bezier(.19,1,.22,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--white);
+  color:var(--ink);
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  cursor:default;
+}
+::selection{background:var(--gold-light);color:var(--wine-deep);}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;border:none;background:none;cursor:pointer;}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:500;letter-spacing:.01em;color:var(--ink);}
+.script{font-family:'Parisienne',cursive;font-weight:400;}
+.eyebrow{
+  font-family:'Jost',sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.28em;
+  font-size:.72rem;
+  color:var(--wine);
+  display:inline-flex;
+  align-items:center;
+  gap:.7em;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--gold);display:inline-block;}
+.container{width:min(1180px,92%);margin-inline:auto;}
+svg{display:block;}
+
+/* ---------- scroll progress ---------- */
+.scroll-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--wine));z-index:9999;width:0%;transition:width .1s linear;}
+
+/* ---------- cursor glow (desktop luxury touch) ---------- */
+.cursor-glow{
+  position:fixed;top:0;left:0;width:26px;height:26px;border-radius:50%;
+  border:1px solid var(--gold);pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),border-color .25s,opacity .3s;
+  mix-blend-mode:difference;opacity:0;
+}
+@media (hover:hover) and (pointer:fine){ .cursor-glow{opacity:1;} }
+.cursor-glow.grow{width:56px;height:56px;border-color:var(--wine);}
+
+/* ---------- preloader ---------- */
+#preloader{
+  position:fixed;inset:0;background:var(--ivory);z-index:10000;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .9s var(--ease), visibility .9s var(--ease);
+}
+#preloader.hide{opacity:0;visibility:hidden;}
+.pre-mark svg{width:150px;height:150px;}
+.pre-mark path{fill:none;stroke:var(--wine);stroke-width:1.4;stroke-linecap:round;
+  stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.1s var(--ease) forwards;}
+.pre-mark .rose{fill:var(--wine);opacity:0;animation:fadeInRose 1s ease forwards .9s;}
+@keyframes draw{to{stroke-dashoffset:0;}}
+@keyframes fadeInRose{to{opacity:1;}}
+
+/* ---------- nav ---------- */
+header.nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  padding:22px 0;
+  transition:background .5s var(--ease),padding .5s var(--ease),box-shadow .5s;
+}
+header.nav.scrolled{background:rgba(251,248,243,.92);backdrop-filter:blur(10px);padding:12px 0;box-shadow:0 8px 30px -10px rgba(36,26,23,.15);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;}
+.brandmark{display:flex;align-items:center;gap:12px;}
+.brandmark svg{width:44px;height:44px;transition:transform .5s var(--ease);}
+header.nav.scrolled .brandmark svg{width:36px;height:36px;}
+.brand-text{line-height:1;}
+.brand-text .script{font-size:1.5rem;color:var(--wine);display:block;}
+.brand-text small{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);}
+nav.links{display:flex;gap:34px;}
+nav.links a{
+  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  position:relative;padding-bottom:6px;
+}
+nav.links a::after{
+  content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--wine);
+  transition:width .4s var(--ease);
+}
+nav.links a:hover::after{width:100%;}
+.nav-cta{
+  display:flex;align-items:center;gap:8px;
+  border:1px solid var(--ink);padding:11px 22px;border-radius:999px;
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  transition:.4s var(--ease);
+}
+.nav-cta:hover{background:var(--wine);border-color:var(--wine);color:var(--white);}
+.nav-cta svg{width:15px;height:15px;}
+.burger{display:none;flex-direction:column;gap:5px;width:26px;}
+.burger span{height:1px;background:var(--ink);width:100%;transition:.3s;}
+
+.mobile-menu{
+  position:fixed;inset:0;background:var(--ink);z-index:850;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  transform:translateY(-100%);transition:transform .6s var(--ease);
+}
+.mobile-menu.open{transform:translateY(0);}
+.mobile-menu a{color:var(--ivory);font-family:'Playfair Display',serif;font-size:1.6rem;}
+.mobile-menu .close-m{position:absolute;top:28px;right:28px;color:var(--ivory);font-size:1.6rem;}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding-top:120px;padding-bottom:80px;
+  background:
+    radial-gradient(ellipse at top left, rgba(176,141,87,.09), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(124,27,46,.06), transparent 55%),
+    var(--ivory);
+  overflow:hidden;
+}
+.hero-frame{
+  position:absolute;inset:22px;border:1px solid var(--gold-light);pointer-events:none;
+  opacity:.7;
+}
+.hero-frame::before,.hero-frame::after{
+  content:'';position:absolute;width:60px;height:60px;border:1px solid var(--gold);
+}
+.hero-frame::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.hero-frame::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+.hero-ornament{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(900px,140vw);opacity:.55;pointer-events:none;
+}
+.hero-ornament path{
+  fill:none;stroke:var(--gold);stroke-width:1;stroke-dasharray:2400;stroke-dashoffset:2400;
+  animation:draw 3.2s var(--ease) forwards .3s;
+}
+.hero-content{position:relative;z-index:3;text-align:center;max-width:820px;padding:0 24px;}
+.hero .eyebrow{justify-content:center;margin-bottom:26px;opacity:0;animation:riseIn .9s var(--ease) forwards .4s;}
+.hero .eyebrow::after{content:'';width:22px;height:1px;background:var(--gold);display:inline-block;}
+.hero h1{
+  font-size:clamp(2.6rem,7vw,5.2rem);line-height:1.02;color:var(--ink);
+  opacity:0;animation:riseIn 1s var(--ease) forwards .55s;
+}
+.hero h1 .script{
+  display:block;font-size:clamp(4.2rem,12vw,8.5rem);color:var(--wine);line-height:.9;margin-bottom:6px;
+}
+.hero p.lede{
+  margin:28px auto 0;max-width:520px;color:var(--ink-soft);font-size:1.02rem;line-height:1.8;
+  opacity:0;animation:riseIn 1s var(--ease) forwards .75s;
+}
+.hero-actions{
+  margin-top:44px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;
+  opacity:0;animation:riseIn 1s var(--ease) forwards .95s;
+}
+.btn{
+  padding:16px 34px;border-radius:999px;font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:10px;position:relative;overflow:hidden;
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease);
+}
+.btn svg{width:16px;height:16px;position:relative;z-index:2;}
+.btn span{position:relative;z-index:2;}
+.btn.primary{background:var(--wine);color:var(--white);}
+.btn.primary::before{
+  content:'';position:absolute;inset:0;background:var(--wine-deep);transform:scaleX(0);transform-origin:left;
+  transition:transform .5s var(--ease);z-index:1;
+}
+.btn.primary:hover::before{transform:scaleX(1);}
+.btn.primary:hover{transform:translateY(-3px);box-shadow:0 18px 32px -12px rgba(124,27,46,.55);}
+.btn.ghost{border:1px solid var(--ink);color:var(--ink);}
+.btn.ghost:hover{background:var(--ink);color:var(--white);transform:translateY(-3px);}
+@keyframes riseIn{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:translateY(0);}}
+
+.scroll-cue{
+  position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:3;
+  display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--ink-soft);
+}
+.scroll-cue span{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;}
+.scroll-cue .line{width:1px;height:38px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden;}
+.scroll-cue .line::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--wine);animation:scrollDrip 2.4s ease-in-out infinite;}
+@keyframes scrollDrip{50%{top:100%;}100%{top:100%;}}
+
+/* ---------- reveal utility ---------- */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease),transform 1s var(--ease);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-scale{opacity:0;transform:scale(.92);transition:opacity 1s var(--ease),transform 1s var(--ease);}
+.reveal-scale.in{opacity:1;transform:scale(1);}
+.stagger .r-item{transition-delay:calc(var(--i) * 110ms);}
+
+/* ---------- section shell ---------- */
+section{position:relative;padding:120px 0;}
+.section-head{max-width:640px;margin-bottom:64px;}
+.section-head.center{margin-inline:auto;text-align:center;}
+.section-head h2{font-size:clamp(2rem,4vw,3rem);margin-top:18px;}
+.divider-orn{width:120px;height:34px;margin:26px auto 0;opacity:.85;}
+.divider-orn path{fill:none;stroke:var(--gold);stroke-width:1;}
+
+/* ---------- about ---------- */
+.about{background:var(--white);}
+.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px;align-items:center;}
+.about-visual{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;background:
+  linear-gradient(160deg,var(--blush),var(--ivory));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);
+}
+.about-visual svg{width:62%;opacity:.9;}
+.about-visual .frame-corner{position:absolute;width:34px;height:34px;border:1px solid var(--gold);}
+.about-visual .frame-corner.tl{top:14px;left:14px;border-right:none;border-bottom:none;}
+.about-visual .frame-corner.br{bottom:14px;right:14px;border-left:none;border-top:none;}
+.about-copy p{color:var(--ink-soft);line-height:1.9;font-size:1rem;margin-top:22px;}
+.stats-row{display:flex;gap:44px;margin-top:48px;flex-wrap:wrap;}
+.stat h3{font-size:2.4rem;color:var(--wine);display:flex;align-items:baseline;}
+.stat span.suffix{font-size:1.4rem;margin-left:2px;}
+.stat p{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px;}
+
+/* ---------- services ---------- */
+.services{background:var(--ivory);}
+.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
+.service-card{
+  background:var(--white);padding:56px 40px;position:relative;overflow:hidden;
+  transition:background .5s var(--ease);
+}
+.service-card::before{
+  content:'';position:absolute;left:0;bottom:0;width:100%;height:0;background:var(--wine);
+  transition:height .55s var(--ease);z-index:0;
+}
+.service-card:hover::before{height:100%;}
+.service-card:hover{color:var(--white);}
+.service-card:hover h3, .service-card:hover p, .service-card:hover .icon-ring{color:var(--white);}
+.service-card:hover .icon-ring{border-color:rgba(255,255,255,.6);}
+.service-card:hover .icon-ring svg{stroke:var(--white);}
+.service-card > *{position:relative;z-index:1;}
+.icon-ring{
+  width:64px;height:64px;border-radius:50%;border:1px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;margin-bottom:26px;
+  transition:.5s var(--ease);
+}
+.icon-ring svg{width:26px;height:26px;stroke:var(--wine);fill:none;stroke-width:1.3;transition:.5s;}
+.service-card h3{font-size:1.4rem;margin-bottom:12px;}
+.service-card p{color:var(--ink-soft);font-size:.92rem;line-height:1.75;}
+.service-tag{margin-top:22px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7;}
+
+/* ---------- gallery ---------- */
+.gallery{background:var(--white);}
+.filter-row{display:flex;gap:14px;justify-content:center;margin-bottom:50px;flex-wrap:wrap;}
+.filter-btn{
+  padding:10px 22px;border-radius:999px;border:1px solid var(--line);font-size:.72rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);transition:.4s var(--ease);
+}
+.filter-btn.active,.filter-btn:hover{background:var(--wine);color:var(--white);border-color:var(--wine);}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:180px;gap:14px;}
+.g-item{position:relative;border-radius:4px;overflow:hidden;grid-row:span 1;cursor:pointer;transition:opacity .4s;}
+.g-item.tall{grid-row:span 2;}
+.g-item.hidden{display:none;}
+.g-item .g-bg{position:absolute;inset:0;transition:transform .8s var(--ease);}
+.g-item:hover .g-bg{transform:scale(1.08);}
+.g-item .g-overlay{
+  position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,26,23,0) 40%,rgba(36,26,23,.88) 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:20px;
+  opacity:0;transition:opacity .5s var(--ease);
+}
+.g-item:hover .g-overlay{opacity:1;}
+.g-overlay .script{color:var(--gold-light);font-size:1.5rem;}
+.g-overlay small{color:#f1e6e0;letter-spacing:.14em;text-transform:uppercase;font-size:.62rem;}
+.g-item .g-plus{
+  position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.6);transition:.4s var(--ease);
+}
+.g-item:hover .g-plus{opacity:1;transform:scale(1);}
+.g-plus svg{width:14px;height:14px;stroke:#fff;}
+
+/* ---------- locations ---------- */
+.locations{background:var(--wine-deep);color:var(--ivory);position:relative;overflow:hidden;}
+.locations::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%, rgba(176,141,87,.16), transparent 45%),
+             radial-gradient(circle at 80% 80%, rgba(176,141,87,.12), transparent 45%);
+}
+.locations .section-head h2, .locations .eyebrow{color:var(--ivory);}
+.locations .eyebrow{color:var(--gold-light);}
+.locations .eyebrow::before,.locations .eyebrow::after{background:var(--gold-light);}
+.loc-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(231,210,168,.25);border:1px solid rgba(231,210,168,.25);}
+.loc-card{background:var(--wine-deep);padding:44px 28px;text-align:center;transition:background .4s;}
+.loc-card:hover{background:rgba(124,27,46,.5);}
+.flag{width:52px;height:52px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--gold-light);font-family:'Playfair Display',serif;font-size:.8rem;letter-spacing:.05em;color:var(--gold-light);}
+.loc-card h4{color:var(--ivory);font-size:1.15rem;margin-bottom:8px;}
+.loc-card p{font-size:.8rem;color:rgba(231,210,168,.75);line-height:1.7;}
+
+/* ---------- testimonials ---------- */
+.testimonials{background:var(--blush);position:relative;}
+.t-wrap{max-width:760px;margin:0 auto;position:relative;text-align:center;}
+.quote-icon{width:46px;margin:0 auto 30px;opacity:.85;}
+.quote-icon path{fill:var(--wine);}
+.t-slide{display:none;}
+.t-slide.active{display:block;animation:fadeUpT .7s var(--ease);}
+@keyframes fadeUpT{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.t-slide p.quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.2rem,2.4vw,1.6rem);line-height:1.65;color:var(--ink);}
+.t-slide .who{margin-top:28px;}
+.t-slide .who .script{font-size:1.6rem;color:var(--wine);}
+.t-slide .who small{display:block;letter-spacing:.16em;text-transform:uppercase;font-size:.66rem;color:var(--ink-soft);margin-top:4px;}
+.t-dots{display:flex;gap:10px;justify-content:center;margin-top:42px;}
+.t-dots button{width:9px;height:9px;border-radius:50%;background:var(--line);transition:.4s;}
+.t-dots button.active{background:var(--wine);width:26px;border-radius:5px;}
+.t-arrows{position:absolute;top:50%;left:0;right:0;display:flex;justify-content:space-between;transform:translateY(-50%);pointer-events:none;}
+.t-arrows button{pointer-events:all;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;transition:.4s;background:var(--blush);}
+.t-arrows button:hover{background:var(--wine);border-color:var(--wine);}
+.t-arrows button:hover svg{stroke:#fff;}
+.t-arrows svg{width:16px;height:16px;stroke:var(--wine);}
+@media(max-width:640px){.t-arrows{display:none;}}
+
+/* ---------- cta / contact ---------- */
+.cta{background:var(--ink);color:var(--ivory);text-align:center;position:relative;overflow:hidden;}
+.cta::after{
+  content:'';position:absolute;inset:-2px;
+  background:repeating-linear-gradient(115deg, rgba(176,141,87,.06) 0 2px, transparent 2px 40px);
+}
+.cta-inner{position:relative;z-index:2;}
+.cta .script{font-size:clamp(2.6rem,6vw,4rem);color:var(--gold-light);display:block;margin-bottom:6px;}
+.cta h2{color:var(--ivory);font-size:clamp(1.6rem,3vw,2.3rem);max-width:640px;margin:0 auto 36px;}
+.cta-actions{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.cta .btn.ghost{border-color:var(--gold-light);color:var(--ivory);}
+.cta .btn.ghost:hover{background:var(--gold-light);color:var(--ink);}
+
+/* ---------- footer ---------- */
+footer{background:var(--white);border-top:1px solid var(--line);padding:80px 0 30px;}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:50px;}
+.foot-brand .script{font-size:2rem;color:var(--wine);}
+.foot-brand p{margin-top:16px;color:var(--ink-soft);font-size:.88rem;line-height:1.8;max-width:280px;}
+.foot-social{display:flex;gap:12px;margin-top:22px;}
+.foot-social a{
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  transition:.4s var(--ease);
+}
+.foot-social a:hover{background:var(--wine);border-color:var(--wine);transform:translateY(-3px);}
+.foot-social svg{width:16px;height:16px;stroke:var(--ink);transition:.3s;}
+.foot-social a:hover svg{stroke:#fff;}
+.foot-col h5{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:22px;}
+.foot-col a, .foot-col p{display:block;color:var(--ink-soft);font-size:.9rem;margin-bottom:14px;transition:.3s;}
+.foot-col a:hover{color:var(--wine);}
+.foot-col .row{display:flex;gap:10px;align-items:flex-start;}
+.foot-col .row svg{width:15px;height:15px;stroke:var(--wine);flex-shrink:0;margin-top:3px;}
+.foot-bottom{
+  margin-top:70px;padding-top:26px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  font-size:.76rem;color:var(--ink-soft);
+}
+.back-top{
+  display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;
+}
+.back-top svg{width:14px;height:14px;stroke:var(--wine);transition:.3s;}
+.back-top:hover svg{transform:translateY(-3px);}
+
+/* ---------- lightbox ---------- */
+.lightbox{position:fixed;inset:0;background:rgba(36,26,23,.94);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.4s;}
+.lightbox.open{opacity:1;visibility:visible;}
+.lightbox-inner{width:min(560px,86%);text-align:center;color:var(--ivory);}
+.lightbox .lb-bg{width:100%;height:340px;border-radius:6px;margin-bottom:26px;}
+.lightbox .script{color:var(--gold-light);font-size:2.2rem;}
+.lightbox-close{position:absolute;top:28px;right:32px;width:40px;height:40px;border-radius:50%;border:1px solid var(--ivory);display:flex;align-items:center;justify-content:center;}
+.lightbox-close svg{width:16px;height:16px;stroke:var(--ivory);}
+
+/* ---------- responsive ---------- */
+@media(max-width:980px){
+  nav.links,.nav-cta{display:none;}
+  .burger{display:flex;}
+  .about-grid{grid-template-columns:1fr;gap:50px;}
+  .service-grid{grid-template-columns:1fr;}
+  .loc-grid{grid-template-columns:repeat(2,1fr);}
+  .foot-grid{grid-template-columns:1fr 1fr;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:560px){
+  section{padding:80px 0;}
+  .loc-grid{grid-template-columns:1fr 1fr;}
+  .foot-grid{grid-template-columns:1fr;gap:36px;}
+  .stats-row{gap:28px;}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:140px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-bar" id="scrollBar"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ================= PRELOADER ================= -->
+<div id="preloader">
+  <div class="pre-mark">
+    <svg viewBox="0 0 200 200" fill="none">
+      <path class="rose" d="M100 78c-5-9-16-13-24-7-9 7-8 21 2 27 7 4 16 3 22-3" stroke="none"/>
+      <path d="M40 100c0-33 27-60 60-60s60 27 60 60-27 60-60 60-60-27-60-60z" />
+      <path d="M62 100c0-21 17-38 38-38s38 17 38 38-17 38-38 38-38-17-38-38z" />
+      <path d="M100 40c-6 10-10 22-6 34M100 160c-6-10-10-22-6-34M40 100c10-6 22-10 34-6M160 100c-10-6-22-10-34-6" />
+    </svg>
+  </div>
+</div>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="siteNav">
+  <div class="container nav-inner">
+    <a href="#top" class="brandmark">
+      <svg viewBox="0 0 100 100" fill="none" stroke="#7C1B2E" stroke-width="1.4">
+        <circle cx="50" cy="50" r="34"/>
+        <circle cx="50" cy="50" r="24"/>
+        <path d="M50 16c-4 7-7 15-4 24M50 84c-4-7-7-15-4-24M16 50c7-4 15-7 24-4M84 50c-7-4-15-7-24-4"/>
+      </svg>
+      <span class="brand-text">
+        <span class="script">Allure</span>
+        <small>Nigeria&nbsp;Events</small>
+      </span>
+    </a>
+    <nav class="links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#locations">Locations</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="https://api.whatsapp.com/send?phone=2349092619051" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 1 1-3.6-6.7M20 4l-5 1 1.3-4"/></svg>
+      Book Now
+    </a>
+    <button class="burger" id="burgerBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-m" id="closeMenu">&times;</button>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#locations">Locations</a>
+  <a href="#testimonials">Testimonials</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="hero-frame"></div>
+  <svg class="hero-ornament" viewBox="0 0 800 800" fill="none">
+    <path d="M400 100c-40 60-120 90-200 60M400 100c40 60 120 90 200 60M400 700c-40-60-120-90-200-60M400 700c40-60 120-90 200-60M100 400c60-40 90-120 60-200M100 400c60 40 90 120 60 200M700 400c-60-40-90-120-60-200M700 400c-60 40-90 120-60 200" stroke-width="1"/>
+    <circle cx="400" cy="400" r="230" stroke-width="1"/>
+    <circle cx="400" cy="400" r="180" stroke-width="1"/>
+  </svg>
+  <div class="hero-content">
+    <span class="eyebrow">Est. In Lagos · Serving The Diaspora</span>
+    <h1><span class="script">Allure</span>Weddings, Corporate &amp; Social Events</h1>
+    <p class="lede">We design and deliver refined, unforgettable celebrations across Lagos, Ogun &amp; Osun — with sister planning desks for clients in Canada, the United States and the United Kingdom.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#contact"><span>Plan Your Event</span>
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn ghost" href="#gallery"><span>View Our Work</span></a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div class="about-visual reveal-scale">
+      <div class="frame-corner tl"></div><div class="frame-corner br"></div>
+      <svg viewBox="0 0 200 200" fill="none" stroke="#7C1B2E" stroke-width="1">
+        <circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="50"/>
+        <path d="M100 30c-8 14-13 30-8 46M100 170c-8-14-13-30-8-46M30 100c14-8 30-13 46-8M170 100c-14-8-30-13-46-8"/>
+        <path d="M100 60c-10-14-30-18-42-6-13 12-9 33 6 40 11 5 24 2 32-8" fill="#7C1B2E" stroke="none" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="about-copy">
+      <span class="eyebrow reveal">Who We Are</span>
+      <h2 class="reveal">Every detail, held to one standard — <span class="script" style="color:var(--wine);font-size:1.4em;">allure.</span></h2>
+      <p class="reveal">Allure Nigeria Events is a full-service planning house for weddings, corporate functions and social celebrations. From the first proposal call to the final send-off, our team handles vendor sourcing, décor direction, logistics and day-of coordination so you experience the day — not the stress.</p>
+      <p class="reveal">We plan proudly from Lagos, and travel across Ogun and Osun. For clients abroad, our partner desks in Canada, the United States and the United Kingdom keep the experience seamless from wherever you are.</p>
+      <div class="stats-row">
+        <div class="stat reveal"><h3 data-count="1000"><span>0</span><span class="suffix">+</span></h3><p>Events Styled</p></div>
+        <div class="stat reveal"><h3 data-count="8"><span>0</span><span class="suffix">yrs</span></h3><p>In The Industry</p></div>
+        <div class="stat reveal"><h3 data-count="4"><span>0</span><span class="suffix"></span></h3><p>Countries Served</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">What We Do</span>
+      <h2>Planning, styled around you</h2>
+      <svg class="divider-orn" viewBox="0 0 120 34"><path d="M0 17c20-16 40-16 60 0s40 16 60 0"/></svg>
+    </div>
+    <div class="service-grid">
+      <div class="service-card reveal">
+        <div class="icon-ring"><svg viewBox="0 0 24 24"><circle cx="8" cy="16" r="4"/><circle cx="16" cy="16" r="4"/><path d="M8 12V8a4 4 0 0 1 8 0v4"/></svg></div>
+        <h3>Weddings</h3>
+        <p>Traditional, white and destination weddings — concept, décor, vendor management and full day-of coordination for both ceremony and reception.</p>
+        <div class="service-tag">Proposal &amp; Planning</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon-ring"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="1"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></div>
+        <h3>Corporate</h3>
+        <p>Product launches, conferences, brand activations and staff events — precise logistics, branding and on-site management for your company.</p>
+        <div class="service-tag">Launches &amp; Conferences</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon-ring"><svg viewBox="0 0 24 24"><path d="M12 2v6M12 16v6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M2 12h6M16 12h6M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2"/></svg></div>
+        <h3>Social</h3>
+        <p>Birthdays, anniversaries, baby showers and private celebrations — thoughtful styling that turns any milestone into a memory.</p>
+        <div class="service-tag">Milestones &amp; Parties</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Recent Celebrations</span>
+      <h2>From our portfolio</h2>
+      <svg class="divider-orn" viewBox="0 0 120 34"><path d="M0 17c20-16 40-16 60 0s40 16 60 0"/></svg>
+    </div>
+    <div class="filter-row reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="wedding">Weddings</button>
+      <button class="filter-btn" data-filter="corporate">Corporate</button>
+      <button class="filter-btn" data-filter="social">Social</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- items injected via JS for variety, see script -->
+    </div>
+  </div>
+</section>
+
+<!-- ================= LOCATIONS ================= -->
+<section class="locations" id="locations">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Where We Plan</span>
+      <h2>Local roots, global reach</h2>
+      <svg class="divider-orn" viewBox="0 0 120 34"><path d="M0 17c20-16 40-16 60 0s40 16 60 0" stroke="#E7D2A8"/></svg>
+    </div>
+    <div class="loc-grid">
+      <div class="loc-card reveal"><div class="flag">NG</div><h4>Nigeria</h4><p>Lagos · Ogun · Osun</p></div>
+      <div class="loc-card reveal"><div class="flag">CA</div><h4>Canada</h4><p>Diaspora planning desk</p></div>
+      <div class="loc-card reveal"><div class="flag">US</div><h4>United States</h4><p>Diaspora planning desk</p></div>
+      <div class="loc-card reveal"><div class="flag">UK</div><h4>United Kingdom</h4><p>Diaspora planning desk</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Kind Words</span>
+      <h2>From couples &amp; clients</h2>
+    </div>
+    <div class="t-wrap reveal">
+      <svg class="quote-icon" viewBox="0 0 48 36"><path d="M14 0C6 4 0 12 0 20c0 9 6 16 15 16 6 0 11-5 11-11S21 14 15 14c-1 0-2 0-3 .3C13 8 17 4 22 2L14 0zm26 0c-8 4-14 12-14 20 0 9 6 16 15 16 6 0 11-5 11-11S47 14 41 14c-1 0-2 0-3 .3C39 8 43 4 48 2L40 0z"/></svg>
+      <div class="t-slides">
+        <div class="t-slide active">
+          <p class="quote">Allure took our wedding vision and made it better than we imagined. Every vendor, every timeline, every detail — handled with so much grace. Our guests are still talking about it.</p>
+          <div class="who"><span class="script">Halima &amp; Olayemi</span><small>#OhLoveStory26 — Lagos</small></div>
+        </div>
+        <div class="t-slide">
+          <p class="quote">We planned our entire wedding from abroad and never once felt out of the loop. The team in Lagos handled everything with such warmth and professionalism.</p>
+          <div class="who"><span class="script">Simi &amp; Femi</span><small>Toronto &amp; Lagos</small></div>
+        </div>
+        <div class="t-slide">
+          <p class="quote">Our product launch needed to feel premium from the first minute. Allure's styling and on-ground coordination made sure it did — flawless execution.</p>
+          <div class="who"><span class="script">A Lagos Beauty Brand</span><small>Corporate Launch</small></div>
+        </div>
+      </div>
+      <div class="t-dots"></div>
+      <div class="t-arrows">
+        <button id="tPrev"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button id="tNext"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA / CONTACT ================= -->
+<section class="cta" id="contact">
+  <div class="container cta-inner reveal">
+    <span class="script">Let's begin</span>
+    <h2>Tell us your date, and let Allure handle the rest.</h2>
+    <div class="cta-actions">
+      <a class="btn primary" href="https://api.whatsapp.com/send?phone=2349092619051" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 1 1-3.6-6.7M20 4l-5 1 1.3-4"/></svg>
+        <span>Chat On WhatsApp</span>
+      </a>
+      <a class="btn ghost" href="https://instagram.com/allurenigeriaevents" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        <span>@allurenigeriaevents</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer id="footer">
+  <div class="container foot-grid">
+    <div class="foot-brand">
+      <span class="script">Allure Nigeria Events</span>
+      <p>A full-service planning house for weddings, corporate functions and social celebrations — proudly Nigerian, globally connected.</p>
+      <div class="foot-social">
+        <a href="https://instagram.com/allurenigeriaevents" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg></a>
+        <a href="https://api.whatsapp.com/send?phone=2349092619051" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 1 1-3.6-6.7M20 4l-5 1 1.3-4"/></svg></a>
+        <a href="mailto:hello@allurenigeriaevents.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h5>Explore</h5>
+      <a href="#about">About Us</a>
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#testimonials">Testimonials</a>
+    </div>
+    <div class="foot-col">
+      <h5>Locations</h5>
+      <p>Lagos · Ogun · Osun</p>
+      <p>Canada · USA · UK</p>
+    </div>
+    <div class="foot-col">
+      <h5>Contact</h5>
+      <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20 12a8 8 0 1 1-3.6-6.7M20 4l-5 1 1.3-4"/></svg><a href="tel:+2349092619051">0909 261 9051</a></div>
+      <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg><a href="tel:+2349051916962">0905 191 6962</a></div>
+      <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><p style="margin:0;">Lagos, Nigeria</p></div>
+    </div>
+  </div>
+  <div class="container foot-bottom">
+    <span>&copy; <span id="year"></span> Allure Nigeria Events. All rights reserved.</span>
+    <a href="#top" class="back-top">Back To Top <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+  </div>
+</footer>
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  <div class="lightbox-inner">
+    <div class="lb-bg" id="lbBg"></div>
+    <span class="script" id="lbTitle"></span>
+    <p id="lbSub" style="letter-spacing:.14em;text-transform:uppercase;font-size:.7rem;color:#E7D2A8;margin-top:8px;"></p>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   ALLURE NIGERIA EVENTS — interaction layer
+   ========================================================= */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* preloader */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('preloader').classList.add('hide'), 700);
+});
+
+/* scroll progress + nav state */
+const nav = document.getElementById('siteNav');
+const bar = document.getElementById('scrollBar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = pct + '%';
+  nav.classList.toggle('scrolled', h.scrollTop > 40);
+}, {passive:true});
+
+/* mobile menu */
+const burger = document.getElementById('burgerBtn');
+const menu = document.getElementById('mobileMenu');
+burger.addEventListener('click', () => menu.classList.add('open'));
+document.getElementById('closeMenu').addEventListener('click', () => menu.classList.remove('open'));
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+
+/* cursor glow (desktop) */
+const glow = document.getElementById('cursorGlow');
+window.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => glow.classList.add('grow'));
+  el.addEventListener('mouseleave', () => glow.classList.remove('grow'));
+});
+
+/* scroll reveal */
+const revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+}, {threshold:.18});
+revealEls.forEach(el => io.observe(el));
+
+/* animated stat counters */
+const stats = document.querySelectorAll('.stat h3');
+const statIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting){
+      const el = en.target;
+      const target = parseInt(el.dataset.count, 10);
+      const span = el.querySelector('span');
+      let cur = 0;
+      const step = Math.max(1, Math.round(target/60));
+      const tick = () => {
+        cur += step;
+        if (cur >= target){ span.textContent = target; return; }
+        span.textContent = cur;
+        requestAnimationFrame(tick);
+      };
+      tick();
+      statIO.unobserve(el);
+    }
+  });
+}, {threshold:.5});
+stats.forEach(s => statIO.observe(s));
+
+/* -------- gallery: generate items with elegant CSS gradients (no external images) -------- */
+const galleryData = [
+  {tag:'wedding', title:'Halima & Olayemi', sub:'#OhLoveStory26', grad:'linear-gradient(135deg,#7C1B2E,#B08D57)', tall:true},
+  {tag:'social',  title:'Simi x Femi',       sub:'Anniversary Dinner', grad:'linear-gradient(135deg,#4A0E1B,#E7D2A8)'},
+  {tag:'corporate',title:'Bloom & Co.',      sub:'Product Launch', grad:'linear-gradient(135deg,#241A17,#7C1B2E)'},
+  {tag:'wedding', title:'Nkem & Chidi',      sub:'Traditional Wedding', grad:'linear-gradient(135deg,#B08D57,#7C1B2E)'},
+  {tag:'social',  title:'Golden Hour',       sub:"50th Birthday", grad:'linear-gradient(135deg,#E7D2A8,#4A0E1B)', tall:true},
+  {tag:'corporate',title:'The Boardroom Gala',sub:'Annual Dinner', grad:'linear-gradient(135deg,#7C1B2E,#241A17)'},
+  {tag:'wedding', title:'Ada & Tunde',       sub:'White Wedding', grad:'linear-gradient(135deg,#4A0E1B,#B08D57)'},
+  {tag:'social',  title:'Baby Adaeze',       sub:'Baby Shower', grad:'linear-gradient(135deg,#B08D57,#241A17)'}
+];
+const grid = document.getElementById('galleryGrid');
+galleryData.forEach((item, i) => {
+  const div = document.createElement('div');
+  div.className = 'g-item reveal' + (item.tall ? ' tall' : '');
+  div.dataset.tag = item.tag;
+  div.innerHTML = `
+    <div class="g-bg" style="position:absolute;inset:0;background:${item.grad};"></div>
+    <div class="g-plus"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg></div>
+    <div class="g-overlay">
+      <span class="script">${item.title}</span>
+      <small>${item.sub}</small>
+    </div>`;
+  div.addEventListener('click', () => openLightbox(item));
+  grid.appendChild(div);
+  io.observe(div);
+});
+
+/* gallery filter */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.g-item').forEach(g => {
+      g.classList.toggle('hidden', !(f === 'all' || g.dataset.tag === f));
+    });
+  });
+});
+
+/* lightbox */
+const lightbox = document.getElementById('lightbox');
+const lbBg = document.getElementById('lbBg');
+const lbTitle = document.getElementById('lbTitle');
+const lbSub = document.getElementById('lbSub');
+function openLightbox(item){
+  lbBg.style.background = item.grad;
+  lbTitle.textContent = item.title;
+  lbSub.textContent = item.sub;
+  lightbox.classList.add('open');
+}
+document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
+lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+
+/* testimonial carousel */
+const slides = document.querySelectorAll('.t-slide');
+const dotsWrap = document.querySelector('.t-dots');
+let tIndex = 0, tTimer;
+slides.forEach((_, i) => {
+  const d = document.createElement('button');
+  if (i === 0) d.classList.add('active');
+  d.addEventListener('click', () => goTo(i));
+  dotsWrap.appendChild(d);
+});
+function goTo(i){
+  slides[tIndex].classList.remove('active');
+  dotsWrap.children[tIndex].classList.remove('active');
+  tIndex = (i + slides.length) % slides.length;
+  slides[tIndex].classList.add('active');
+  dotsWrap.children[tIndex].classList.add('active');
+}
+document.getElementById('tPrev').addEventListener('click', () => { goTo(tIndex-1); restart(); });
+document.getElementById('tNext').addEventListener('click', () => { goTo(tIndex+1); restart(); });
+function restart(){ clearInterval(tTimer); tTimer = setInterval(() => goTo(tIndex+1), 6000); }
+restart();
+
+/* magnetic buttons (subtle luxury micro-interaction) */
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width/2) * 0.18;
+    const y = (e.clientY - r.top - r.height/2) * 0.35;
+    btn.style.transform = `translate(${x}px,${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => btn.style.transform = '');
+});
+</script>
+</body>
+</html>
